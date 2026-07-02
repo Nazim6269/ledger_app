@@ -61,6 +61,63 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  //=========== SEED DATA=============//
+  Future<void> seedIfEmpty() async {
+    final existing = await select(households).get();
+    if (existing.isNotEmpty) return;
+
+    const householdId = 'house_1';
+    await into(households).insert(
+      HouseholdsCompanion.insert(
+        id: householdId,
+        name: 'Our Home',
+        createdBy: 'user_1',
+      ),
+    );
+
+    await into(householdMembers).insert(
+      HouseholdMembersCompanion.insert(
+        id: 'member_1',
+        householdId: householdId,
+        userId: 'user_1',
+        userName: 'You',
+      ),
+    );
+
+    await into(householdMembers).insert(
+      HouseholdMembersCompanion.insert(
+        id: 'member_2',
+        householdId: householdId,
+        userId: 'user_2',
+        userName: 'Partner',
+      ),
+    );
+  }
+
+  //================ QUERIES==========================//
+  Future<List<HouseholdMember>> getHouseholdMembers(String householdId) {
+    return (select(
+      householdMembers,
+    )..where((m) => m.householdId.equals(householdId))).get();
+  }
+
+  Stream<List<Transaction>> watchTransactions(String householdId) {
+    return (select(transactions)
+          ..where((t) => t.householdId.equals(householdId))
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .watch();
+  }
+
+  Future<void> insertTransactionWithSplits({
+    required Transaction transaction,
+    required List<Split> splits,
+  }) async {
+    await batch((batch) {
+      batch.insert(transactions, transaction);
+      batch.insertAll(this.splits, splits);
+    });
+  }
 }
 
 LazyDatabase _openConnection() {
