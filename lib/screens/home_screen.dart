@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ledger_app/providers/database_provider.dart';
+import 'package:ledger_app/providers/transaction_stream_provider.dart';
+import '../providers/database_provider.dart';
+import '../widgets/transaction_tile.dart';
+import 'add_expense_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -17,12 +20,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext ctx) {
-    final db = ref.watch(databaseProvider);
+  Widget build(BuildContext context) {
+    final transactionsAsync = ref.watch(transactionsStreamProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Ledger')),
-      body: Center(child: Text('Database connected ${db.schemaVersion}')),
+      body: transactionsAsync.when(
+        data: (transactions) {
+          if (transactions.isEmpty) {
+            return const Center(
+              child: Text('No expenses yet. Tap + to add one.'),
+            );
+          }
+          return ListView.builder(
+            itemCount: transactions.length,
+            itemBuilder: (context, index) =>
+                TransactionTile(transaction: transactions[index]),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddExpenseScreen()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
+
