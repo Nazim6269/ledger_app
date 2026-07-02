@@ -109,9 +109,9 @@ class AppDatabase extends _$AppDatabase {
         .watch();
   }
 
-  Future<void> insertTransactionWithSplits({
-    required Transaction transaction,
-    required List<Split> splits,
+  Future<void> insertTransactionWithSplitCompanions({
+    required TransactionsCompanion transaction,
+    required List<SplitsCompanion> splits,
   }) async {
     await batch((batch) {
       batch.insert(transactions, transaction);
@@ -127,4 +127,3 @@ LazyDatabase _openConnection() {
     return NativeDatabase(file);
   });
 }
-
