@@ -4,7 +4,6 @@ import 'package:ledger_app/providers/auth_provider.dart';
 import 'package:ledger_app/providers/household_repo_provider.dart';
 import 'package:ledger_app/providers/transaction_stream_provider.dart';
 import 'package:ledger_app/screens/settlement_screen.dart';
-import '../providers/database_provider.dart';
 import '../widgets/transaction_tile.dart';
 import 'add_expense_screen.dart';
 
@@ -19,7 +18,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(databaseProvider).seedIfEmpty());
   }
 
   @override

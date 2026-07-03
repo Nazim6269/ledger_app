@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/providers/current_user_provider.dart';
+import 'package:ledger_app/providers/household_repo_provider.dart';
 import 'package:ledger_app/providers/repo_provider.dart';
 import '../models/split_type.dart';
 import '../logic/split_calculator.dart';
@@ -119,10 +121,13 @@ class ExpenseFormNotifier extends StateNotifier<ExpenseFormState> {
 }
 
 final expenseFormProvider =
-    StateNotifierProvider.autoDispose<ExpenseFormNotifier, ExpenseFormState>(
-      (ref) => ExpenseFormNotifier(
-        ref,
-        'house_1',
-        'user_1',
-      ), // hardcoded until auth exists
-    );
+    StateNotifierProvider.autoDispose<ExpenseFormNotifier, ExpenseFormState>((
+      ref,
+    ) {
+      final household = ref.watch(currentHouseholdProvider).value;
+      final userId = ref.watch(currentUserProvider);
+      if (household == null) {
+        throw Exception('No household selected');
+      }
+      return ExpenseFormNotifier(ref, household.id, userId);
+    });

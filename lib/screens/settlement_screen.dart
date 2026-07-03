@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/providers/current_user_provider.dart';
+import 'package:ledger_app/providers/household_repo_provider.dart';
 import 'package:ledger_app/providers/repo_provider.dart';
 import 'package:ledger_app/providers/transaction_stream_provider.dart';
 import '../logic/settlement_calculator.dart';
 import '../providers/settlement_provider.dart';
-
-const _currentUserId = 'user_1'; // hardcoded until auth exists
+import '../providers/household_repo_provider.dart';
 
 class SettlementScreen extends ConsumerWidget {
   const SettlementScreen({super.key});
@@ -13,6 +14,7 @@ class SettlementScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dataAsync = ref.watch(settlementProvider);
+    final currentUserId = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settle Up')),
@@ -43,7 +45,7 @@ class SettlementScreen extends ConsumerWidget {
                   isOwed ? Icons.arrow_downward : Icons.arrow_upward,
                   color: isOwed ? Colors.green : Colors.red,
                 ),
-                title: Text(userId == _currentUserId ? 'You' : userId),
+                title: Text(userId == currentUserId ? 'You' : userId),
                 subtitle: Text(isOwed ? 'is owed' : 'owes'),
                 trailing: Text(
                   '\$${balance.abs().toStringAsFixed(2)}',
@@ -54,7 +56,13 @@ class SettlementScreen extends ConsumerWidget {
                 ),
                 onTap: balance.abs() < 0.01
                     ? null
-                    : () => _confirmSettle(context, ref, userId, balance),
+                    : () => _confirmSettle(
+                        context,
+                        ref,
+                        currentUserId,
+                        userId,
+                        balance,
+                      ),
               );
             },
           );
@@ -68,6 +76,7 @@ class SettlementScreen extends ConsumerWidget {
   void _confirmSettle(
     BuildContext context,
     WidgetRef ref,
+    String currentUserId,
     String otherUserId,
     double balance,
   ) {
@@ -90,12 +99,14 @@ class SettlementScreen extends ConsumerWidget {
           ),
           FilledButton(
             onPressed: () async {
+              final household = ref.read(currentHouseholdProvider).value;
+              if (household == null) return;
               await ref
                   .read(transactionRepoProvider)
                   .settleUp(
-                    householdId: householdId,
-                    fromUserId: isOwedByMe ? _currentUserId : otherUserId,
-                    toUserId: isOwedByMe ? otherUserId : _currentUserId,
+                    householdId: household.id,
+                    fromUserId: isOwedByMe ? currentUserId : otherUserId,
+                    toUserId: isOwedByMe ? otherUserId : currentUserId,
                     amount: amount,
                   );
               if (context.mounted) Navigator.pop(context);
