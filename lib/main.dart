@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/providers/auth_provider.dart';
+import 'package:ledger_app/providers/household_repo_provider.dart';
 import 'package:ledger_app/screens/home_screen.dart';
+import 'package:ledger_app/screens/household_setup_screen.dart';
 import 'package:ledger_app/screens/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -41,11 +45,32 @@ class AuthGate extends ConsumerWidget {
     return authState.when(
       data: (state) {
         final session = state.session;
-        return session != null ? const HomeScreen() : const LoginScreen();
+        if (session == null) return const LoginScreen();
+        return HouseholdGate();
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (err, _) => Scaffold(body: Center(child: Text('Error: $err'))),
+    );
+  }
+}
+
+//============== HouseholdGate=================//
+class HouseholdGate extends ConsumerWidget {
+  HouseholdGate({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final householdAsync = ref.watch(currentHouseholdProvider);
+    return householdAsync.when(
+      data: (household) {
+        return household != null
+            ? const HomeScreen()
+            : const HouseholdSetupScreen();
+      },
+      error: (error, _) => Scaffold(body: Center(child: Text("Error $e"))),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 }

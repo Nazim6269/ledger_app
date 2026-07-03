@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/providers/auth_provider.dart';
+import 'package:ledger_app/providers/household_repo_provider.dart';
 import 'package:ledger_app/providers/transaction_stream_provider.dart';
 import 'package:ledger_app/screens/settlement_screen.dart';
 import '../providers/database_provider.dart';
@@ -29,6 +30,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: const Text('Ledger'),
         actions: [
+          IconButton(
+            onPressed: () {
+              final household = ref.read(currentHouseholdProvider).value;
+              if (household != null) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("Invite Code"),
+                    content: SelectableText(household.id),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("Close"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            icon: Icon(Icons.group_add),
+          ),
           IconButton(
             onPressed: () => Navigator.push(
               ctx,
