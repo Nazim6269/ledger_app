@@ -18,6 +18,8 @@ class SplitResult {
 
   SplitResult.success(this.amountByUserId) : error = null;
   SplitResult.failure(this.error) : amountByUserId = const {};
+
+  bool get isValid => error == null;
 }
 
 class SplitCalculator {
