@@ -53,14 +53,28 @@ class Splits extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-// ---- DATABASE ----
+class Settlements extends Table {
+  TextColumn get id => text()();
+  TextColumn get householdId => text().references(Households, #id)();
+  TextColumn get fromUserId => text()();
+  TextColumn get toUserId => text()();
+  RealColumn get amount => real()();
+  DateTimeColumn get settledAt => dateTime().withDefault(currentDateAndTime)();
 
-@DriftDatabase(tables: [Households, HouseholdMembers, Transactions, Splits])
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+//====================DATABASE==================
+
+@DriftDatabase(
+  tables: [Households, HouseholdMembers, Transactions, Splits, Settlements],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   //=========== SEED DATA=============//
   Future<void> seedIfEmpty() async {
@@ -117,6 +131,25 @@ class AppDatabase extends _$AppDatabase {
       batch.insert(transactions, transaction);
       batch.insertAll(this.splits, splits);
     });
+  }
+
+  Stream<List<Transaction>> watchSharedTransactions(String householdId) {
+    return (select(transactions)..where(
+          (t) => t.householdId.equals(householdId) & t.isShared.equals(true),
+        ))
+        .watch();
+  }
+
+  Stream<List<Split>> watchAllSplits() => select(splits).watch();
+
+  Stream<List<Settlement>> watchSettlements(String householdId) {
+    return (select(
+      settlements,
+    )..where((s) => s.householdId.equals(householdId))).watch();
+  }
+
+  Future<void> insertSettlement(SettlementsCompanion settlement) {
+    return into(settlements).insert(settlement);
   }
 }
 

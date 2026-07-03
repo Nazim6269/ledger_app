@@ -1604,6 +1604,425 @@ class SplitsCompanion extends UpdateCompanion<Split> {
   }
 }
 
+class $SettlementsTable extends Settlements
+    with TableInfo<$SettlementsTable, Settlement> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SettlementsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _householdIdMeta = const VerificationMeta(
+    'householdId',
+  );
+  @override
+  late final GeneratedColumn<String> householdId = GeneratedColumn<String>(
+    'household_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES households (id)',
+    ),
+  );
+  static const VerificationMeta _fromUserIdMeta = const VerificationMeta(
+    'fromUserId',
+  );
+  @override
+  late final GeneratedColumn<String> fromUserId = GeneratedColumn<String>(
+    'from_user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _toUserIdMeta = const VerificationMeta(
+    'toUserId',
+  );
+  @override
+  late final GeneratedColumn<String> toUserId = GeneratedColumn<String>(
+    'to_user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _settledAtMeta = const VerificationMeta(
+    'settledAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> settledAt = GeneratedColumn<DateTime>(
+    'settled_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    householdId,
+    fromUserId,
+    toUserId,
+    amount,
+    settledAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'settlements';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Settlement> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('household_id')) {
+      context.handle(
+        _householdIdMeta,
+        householdId.isAcceptableOrUnknown(
+          data['household_id']!,
+          _householdIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_householdIdMeta);
+    }
+    if (data.containsKey('from_user_id')) {
+      context.handle(
+        _fromUserIdMeta,
+        fromUserId.isAcceptableOrUnknown(
+          data['from_user_id']!,
+          _fromUserIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_fromUserIdMeta);
+    }
+    if (data.containsKey('to_user_id')) {
+      context.handle(
+        _toUserIdMeta,
+        toUserId.isAcceptableOrUnknown(data['to_user_id']!, _toUserIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_toUserIdMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('settled_at')) {
+      context.handle(
+        _settledAtMeta,
+        settledAt.isAcceptableOrUnknown(data['settled_at']!, _settledAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Settlement map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Settlement(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      householdId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}household_id'],
+      )!,
+      fromUserId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}from_user_id'],
+      )!,
+      toUserId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}to_user_id'],
+      )!,
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      )!,
+      settledAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}settled_at'],
+      )!,
+    );
+  }
+
+  @override
+  $SettlementsTable createAlias(String alias) {
+    return $SettlementsTable(attachedDatabase, alias);
+  }
+}
+
+class Settlement extends DataClass implements Insertable<Settlement> {
+  final String id;
+  final String householdId;
+  final String fromUserId;
+  final String toUserId;
+  final double amount;
+  final DateTime settledAt;
+  const Settlement({
+    required this.id,
+    required this.householdId,
+    required this.fromUserId,
+    required this.toUserId,
+    required this.amount,
+    required this.settledAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['household_id'] = Variable<String>(householdId);
+    map['from_user_id'] = Variable<String>(fromUserId);
+    map['to_user_id'] = Variable<String>(toUserId);
+    map['amount'] = Variable<double>(amount);
+    map['settled_at'] = Variable<DateTime>(settledAt);
+    return map;
+  }
+
+  SettlementsCompanion toCompanion(bool nullToAbsent) {
+    return SettlementsCompanion(
+      id: Value(id),
+      householdId: Value(householdId),
+      fromUserId: Value(fromUserId),
+      toUserId: Value(toUserId),
+      amount: Value(amount),
+      settledAt: Value(settledAt),
+    );
+  }
+
+  factory Settlement.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Settlement(
+      id: serializer.fromJson<String>(json['id']),
+      householdId: serializer.fromJson<String>(json['householdId']),
+      fromUserId: serializer.fromJson<String>(json['fromUserId']),
+      toUserId: serializer.fromJson<String>(json['toUserId']),
+      amount: serializer.fromJson<double>(json['amount']),
+      settledAt: serializer.fromJson<DateTime>(json['settledAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'householdId': serializer.toJson<String>(householdId),
+      'fromUserId': serializer.toJson<String>(fromUserId),
+      'toUserId': serializer.toJson<String>(toUserId),
+      'amount': serializer.toJson<double>(amount),
+      'settledAt': serializer.toJson<DateTime>(settledAt),
+    };
+  }
+
+  Settlement copyWith({
+    String? id,
+    String? householdId,
+    String? fromUserId,
+    String? toUserId,
+    double? amount,
+    DateTime? settledAt,
+  }) => Settlement(
+    id: id ?? this.id,
+    householdId: householdId ?? this.householdId,
+    fromUserId: fromUserId ?? this.fromUserId,
+    toUserId: toUserId ?? this.toUserId,
+    amount: amount ?? this.amount,
+    settledAt: settledAt ?? this.settledAt,
+  );
+  Settlement copyWithCompanion(SettlementsCompanion data) {
+    return Settlement(
+      id: data.id.present ? data.id.value : this.id,
+      householdId: data.householdId.present
+          ? data.householdId.value
+          : this.householdId,
+      fromUserId: data.fromUserId.present
+          ? data.fromUserId.value
+          : this.fromUserId,
+      toUserId: data.toUserId.present ? data.toUserId.value : this.toUserId,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      settledAt: data.settledAt.present ? data.settledAt.value : this.settledAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Settlement(')
+          ..write('id: $id, ')
+          ..write('householdId: $householdId, ')
+          ..write('fromUserId: $fromUserId, ')
+          ..write('toUserId: $toUserId, ')
+          ..write('amount: $amount, ')
+          ..write('settledAt: $settledAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, householdId, fromUserId, toUserId, amount, settledAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Settlement &&
+          other.id == this.id &&
+          other.householdId == this.householdId &&
+          other.fromUserId == this.fromUserId &&
+          other.toUserId == this.toUserId &&
+          other.amount == this.amount &&
+          other.settledAt == this.settledAt);
+}
+
+class SettlementsCompanion extends UpdateCompanion<Settlement> {
+  final Value<String> id;
+  final Value<String> householdId;
+  final Value<String> fromUserId;
+  final Value<String> toUserId;
+  final Value<double> amount;
+  final Value<DateTime> settledAt;
+  final Value<int> rowid;
+  const SettlementsCompanion({
+    this.id = const Value.absent(),
+    this.householdId = const Value.absent(),
+    this.fromUserId = const Value.absent(),
+    this.toUserId = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.settledAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SettlementsCompanion.insert({
+    required String id,
+    required String householdId,
+    required String fromUserId,
+    required String toUserId,
+    required double amount,
+    this.settledAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       householdId = Value(householdId),
+       fromUserId = Value(fromUserId),
+       toUserId = Value(toUserId),
+       amount = Value(amount);
+  static Insertable<Settlement> custom({
+    Expression<String>? id,
+    Expression<String>? householdId,
+    Expression<String>? fromUserId,
+    Expression<String>? toUserId,
+    Expression<double>? amount,
+    Expression<DateTime>? settledAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (householdId != null) 'household_id': householdId,
+      if (fromUserId != null) 'from_user_id': fromUserId,
+      if (toUserId != null) 'to_user_id': toUserId,
+      if (amount != null) 'amount': amount,
+      if (settledAt != null) 'settled_at': settledAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SettlementsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? householdId,
+    Value<String>? fromUserId,
+    Value<String>? toUserId,
+    Value<double>? amount,
+    Value<DateTime>? settledAt,
+    Value<int>? rowid,
+  }) {
+    return SettlementsCompanion(
+      id: id ?? this.id,
+      householdId: householdId ?? this.householdId,
+      fromUserId: fromUserId ?? this.fromUserId,
+      toUserId: toUserId ?? this.toUserId,
+      amount: amount ?? this.amount,
+      settledAt: settledAt ?? this.settledAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (householdId.present) {
+      map['household_id'] = Variable<String>(householdId.value);
+    }
+    if (fromUserId.present) {
+      map['from_user_id'] = Variable<String>(fromUserId.value);
+    }
+    if (toUserId.present) {
+      map['to_user_id'] = Variable<String>(toUserId.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (settledAt.present) {
+      map['settled_at'] = Variable<DateTime>(settledAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SettlementsCompanion(')
+          ..write('id: $id, ')
+          ..write('householdId: $householdId, ')
+          ..write('fromUserId: $fromUserId, ')
+          ..write('toUserId: $toUserId, ')
+          ..write('amount: $amount, ')
+          ..write('settledAt: $settledAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1613,6 +2032,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $TransactionsTable transactions = $TransactionsTable(this);
   late final $SplitsTable splits = $SplitsTable(this);
+  late final $SettlementsTable settlements = $SettlementsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1622,6 +2042,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     householdMembers,
     transactions,
     splits,
+    settlements,
   ];
 }
 
@@ -1681,6 +2102,24 @@ final class $$HouseholdsTableReferences
     ).filter((f) => f.householdId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_transactionsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$SettlementsTable, List<Settlement>>
+  _settlementsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.settlements,
+    aliasName: 'households__id__settlements__household_id',
+  );
+
+  $$SettlementsTableProcessedTableManager get settlementsRefs {
+    final manager = $$SettlementsTableTableManager(
+      $_db,
+      $_db.settlements,
+    ).filter((f) => f.householdId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_settlementsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -1762,6 +2201,31 @@ class $$HouseholdsTableFilterComposer
           }) => $$TransactionsTableFilterComposer(
             $db: $db,
             $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> settlementsRefs(
+    Expression<bool> Function($$SettlementsTableFilterComposer f) f,
+  ) {
+    final $$SettlementsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.settlements,
+      getReferencedColumn: (t) => t.householdId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SettlementsTableFilterComposer(
+            $db: $db,
+            $table: $db.settlements,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -1880,6 +2344,31 @@ class $$HouseholdsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> settlementsRefs<T extends Object>(
+    Expression<T> Function($$SettlementsTableAnnotationComposer a) f,
+  ) {
+    final $$SettlementsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.settlements,
+      getReferencedColumn: (t) => t.householdId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SettlementsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.settlements,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$HouseholdsTableTableManager
@@ -1898,6 +2387,7 @@ class $$HouseholdsTableTableManager
           PrefetchHooks Function({
             bool householdMembersRefs,
             bool transactionsRefs,
+            bool settlementsRefs,
           })
         > {
   $$HouseholdsTableTableManager(_$AppDatabase db, $HouseholdsTable table)
@@ -1952,12 +2442,17 @@ class $$HouseholdsTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({householdMembersRefs = false, transactionsRefs = false}) {
+              ({
+                householdMembersRefs = false,
+                transactionsRefs = false,
+                settlementsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (householdMembersRefs) db.householdMembers,
                     if (transactionsRefs) db.transactions,
+                    if (settlementsRefs) db.settlements,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -2004,6 +2499,27 @@ class $$HouseholdsTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (settlementsRefs)
+                        await $_getPrefetchedData<
+                          Household,
+                          $HouseholdsTable,
+                          Settlement
+                        >(
+                          currentTable: table,
+                          referencedTable: $$HouseholdsTableReferences
+                              ._settlementsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$HouseholdsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).settlementsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.householdId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -2024,7 +2540,11 @@ typedef $$HouseholdsTableProcessedTableManager =
       $$HouseholdsTableUpdateCompanionBuilder,
       (Household, $$HouseholdsTableReferences),
       Household,
-      PrefetchHooks Function({bool householdMembersRefs, bool transactionsRefs})
+      PrefetchHooks Function({
+        bool householdMembersRefs,
+        bool transactionsRefs,
+        bool settlementsRefs,
+      })
     >;
 typedef $$HouseholdMembersTableCreateCompanionBuilder =
     HouseholdMembersCompanion Function({
@@ -3134,6 +3654,344 @@ typedef $$SplitsTableProcessedTableManager =
       Split,
       PrefetchHooks Function({bool transactionId})
     >;
+typedef $$SettlementsTableCreateCompanionBuilder =
+    SettlementsCompanion Function({
+      required String id,
+      required String householdId,
+      required String fromUserId,
+      required String toUserId,
+      required double amount,
+      Value<DateTime> settledAt,
+      Value<int> rowid,
+    });
+typedef $$SettlementsTableUpdateCompanionBuilder =
+    SettlementsCompanion Function({
+      Value<String> id,
+      Value<String> householdId,
+      Value<String> fromUserId,
+      Value<String> toUserId,
+      Value<double> amount,
+      Value<DateTime> settledAt,
+      Value<int> rowid,
+    });
+
+final class $$SettlementsTableReferences
+    extends BaseReferences<_$AppDatabase, $SettlementsTable, Settlement> {
+  $$SettlementsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $HouseholdsTable _householdIdTable(_$AppDatabase db) =>
+      db.households.createAlias('settlements__household_id__households__id');
+
+  $$HouseholdsTableProcessedTableManager get householdId {
+    final $_column = $_itemColumn<String>('household_id')!;
+
+    final manager = $$HouseholdsTableTableManager(
+      $_db,
+      $_db.households,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_householdIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$SettlementsTableFilterComposer
+    extends Composer<_$AppDatabase, $SettlementsTable> {
+  $$SettlementsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fromUserId => $composableBuilder(
+    column: $table.fromUserId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get toUserId => $composableBuilder(
+    column: $table.toUserId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get settledAt => $composableBuilder(
+    column: $table.settledAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$HouseholdsTableFilterComposer get householdId {
+    final $$HouseholdsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.householdId,
+      referencedTable: $db.households,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HouseholdsTableFilterComposer(
+            $db: $db,
+            $table: $db.households,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SettlementsTableOrderingComposer
+    extends Composer<_$AppDatabase, $SettlementsTable> {
+  $$SettlementsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fromUserId => $composableBuilder(
+    column: $table.fromUserId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get toUserId => $composableBuilder(
+    column: $table.toUserId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get settledAt => $composableBuilder(
+    column: $table.settledAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$HouseholdsTableOrderingComposer get householdId {
+    final $$HouseholdsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.householdId,
+      referencedTable: $db.households,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HouseholdsTableOrderingComposer(
+            $db: $db,
+            $table: $db.households,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SettlementsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SettlementsTable> {
+  $$SettlementsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get fromUserId => $composableBuilder(
+    column: $table.fromUserId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get toUserId =>
+      $composableBuilder(column: $table.toUserId, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get settledAt =>
+      $composableBuilder(column: $table.settledAt, builder: (column) => column);
+
+  $$HouseholdsTableAnnotationComposer get householdId {
+    final $$HouseholdsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.householdId,
+      referencedTable: $db.households,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HouseholdsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.households,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SettlementsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SettlementsTable,
+          Settlement,
+          $$SettlementsTableFilterComposer,
+          $$SettlementsTableOrderingComposer,
+          $$SettlementsTableAnnotationComposer,
+          $$SettlementsTableCreateCompanionBuilder,
+          $$SettlementsTableUpdateCompanionBuilder,
+          (Settlement, $$SettlementsTableReferences),
+          Settlement,
+          PrefetchHooks Function({bool householdId})
+        > {
+  $$SettlementsTableTableManager(_$AppDatabase db, $SettlementsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SettlementsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SettlementsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SettlementsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> householdId = const Value.absent(),
+                Value<String> fromUserId = const Value.absent(),
+                Value<String> toUserId = const Value.absent(),
+                Value<double> amount = const Value.absent(),
+                Value<DateTime> settledAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SettlementsCompanion(
+                id: id,
+                householdId: householdId,
+                fromUserId: fromUserId,
+                toUserId: toUserId,
+                amount: amount,
+                settledAt: settledAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String householdId,
+                required String fromUserId,
+                required String toUserId,
+                required double amount,
+                Value<DateTime> settledAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SettlementsCompanion.insert(
+                id: id,
+                householdId: householdId,
+                fromUserId: fromUserId,
+                toUserId: toUserId,
+                amount: amount,
+                settledAt: settledAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SettlementsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({householdId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (householdId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.householdId,
+                                referencedTable: $$SettlementsTableReferences
+                                    ._householdIdTable(db),
+                                referencedColumn: $$SettlementsTableReferences
+                                    ._householdIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SettlementsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SettlementsTable,
+      Settlement,
+      $$SettlementsTableFilterComposer,
+      $$SettlementsTableOrderingComposer,
+      $$SettlementsTableAnnotationComposer,
+      $$SettlementsTableCreateCompanionBuilder,
+      $$SettlementsTableUpdateCompanionBuilder,
+      (Settlement, $$SettlementsTableReferences),
+      Settlement,
+      PrefetchHooks Function({bool householdId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3146,4 +4004,6 @@ class $AppDatabaseManager {
       $$TransactionsTableTableManager(_db, _db.transactions);
   $$SplitsTableTableManager get splits =>
       $$SplitsTableTableManager(_db, _db.splits);
+  $$SettlementsTableTableManager get settlements =>
+      $$SettlementsTableTableManager(_db, _db.settlements);
 }

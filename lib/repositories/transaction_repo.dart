@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../database/app_database.dart';
+import 'package:rxdart/rxdart.dart';
 
 class TransactionRepository {
   final AppDatabase _db;
@@ -51,5 +52,49 @@ class TransactionRepository {
       transaction: transaction,
       splits: splitRows,
     );
+  }
+
+  Stream<SettlementData> watchSettlemenData(String householdId) {
+    return Rx.combineLatest3(
+      _db.watchSharedTransactions(householdId),
+      _db.watchAllSplits(),
+      _db.watchSettlements(householdId),
+      (transactions, splits, settlements) =>
+          SettlementData(transactions, splits, settlements),
+    );
+  }
+
+  Future<void> settleUp({
+    required String fromUserId,
+    required String toUserId,
+    required String householdId,
+    required double amount,
+  }) async {
+    const uuid = Uuid();
+    await _db.insertSettlement(
+      SettlementsCompanion.insert(
+        id: uuid.v4(),
+        householdId: householdId,
+        fromUserId: fromUserId,
+        toUserId: toUserId,
+        amount: amount,
+      ),
+    );
+  }
+}
+
+class SettlementData {
+  final List<Transaction> sharedTransactions;
+  final List<Split> allSplits;
+  final List<Settlement> settlements;
+
+  SettlementData(this.sharedTransactions, this.allSplits, this.settlements);
+
+  Map<String, List<Split>> get splitsByTransactionId {
+    final map = <String, List<Split>>{};
+    for (final s in allSplits) {
+      map.putIfAbsent(s.transactionId, () => []).add(s);
+    }
+    return map;
   }
 }

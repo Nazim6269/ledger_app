@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/providers/transaction_stream_provider.dart';
+import 'package:ledger_app/screens/settlement_screen.dart';
 import '../providers/database_provider.dart';
 import '../widgets/transaction_tile.dart';
 import 'add_expense_screen.dart';
@@ -20,11 +21,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     final transactionsAsync = ref.watch(transactionsStreamProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Ledger')),
+      appBar: AppBar(
+        title: const Text('Ledger'),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              ctx,
+              MaterialPageRoute(builder: (_) => const SettlementScreen()),
+            ),
+            icon: Icon(Icons.balance),
+          ),
+        ],
+      ),
       body: transactionsAsync.when(
         data: (transactions) {
           if (transactions.isEmpty) {
@@ -53,4 +65,3 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
-
