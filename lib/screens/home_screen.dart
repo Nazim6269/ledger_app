@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/providers/auth_provider.dart';
 import 'package:ledger_app/providers/transaction_stream_provider.dart';
 import 'package:ledger_app/screens/settlement_screen.dart';
 import '../providers/database_provider.dart';
@@ -34,6 +35,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               MaterialPageRoute(builder: (_) => const SettlementScreen()),
             ),
             icon: Icon(Icons.balance),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => ref.read(authrepoProvider).signOut(),
           ),
         ],
       ),

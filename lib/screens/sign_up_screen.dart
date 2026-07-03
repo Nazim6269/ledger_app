@@ -1,0 +1,103 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/auth_provider.dart';
+
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
+
+  @override
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _loading = false;
+  String? _error;
+
+  Future<void> _signup() async {
+    if (_passwordController.text.length < 6) {
+      setState(() => _error = 'Password must be at least 6 characters');
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      await ref
+          .read(authrepoProvider)
+          .signUp(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+            name: _nameController.text.trim(),
+          );
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      setState(() => _error = 'Sign up failed: ${e.toString()}');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sign Up')),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
+            if (_error != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            ],
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: _loading ? null : _signup,
+              child: _loading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Create Account'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
