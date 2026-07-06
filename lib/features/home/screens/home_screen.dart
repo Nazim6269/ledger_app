@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ledger_app/features/common/empty_view_widget.dart';
-import 'package:ledger_app/features/common/loading_widget.dart';
-import 'package:ledger_app/features/home/widgets/add_expense_fab.dart';
-import 'package:ledger_app/features/home/widgets/invitecode_dialog.dart';
 import 'package:ledger_app/providers/auth_provider.dart';
 import 'package:ledger_app/providers/household_repo_provider.dart';
 import 'package:ledger_app/providers/transaction_stream_provider.dart';
+import 'package:ledger_app/screens/add_expense_screen.dart';
 import 'package:ledger_app/screens/settlement_screen.dart';
-import '../widgets/transaction_tile.dart';
+import 'package:ledger_app/widgets/transaction_tile.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -32,10 +29,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: const Text('Ledger'),
         actions: [
           IconButton(
-            onPressed: () async {
+            onPressed: () {
               final household = ref.read(currentHouseholdProvider).value;
               if (household != null) {
-                await InviteCodeDialog.show(context, household.id);
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("Invite Code"),
+                    content: SelectableText(household.id),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("Close"),
+                      ),
+                    ],
+                  ),
+                );
               }
             },
             icon: Icon(Icons.group_add),
@@ -56,7 +65,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: transactionsAsync.when(
         data: (transactions) {
           if (transactions.isEmpty) {
-            return EmptyViewWidget();
+            return const Center(
+              child: Text('No expenses yet. Tap + to add one.'),
+            );
           }
           return ListView.builder(
             itemCount: transactions.length,
@@ -64,10 +75,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 TransactionTile(transaction: transactions[index]),
           );
         },
-        loading: () => LoadingWidget(),
-        error: (err, stack) => ErrorWidget(err),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
       ),
-      floatingActionButton: AddExpenseFab(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddExpenseScreen()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
