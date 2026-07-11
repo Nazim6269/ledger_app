@@ -65,16 +65,34 @@ class Settlements extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class OutboxItems extends Table {
+  TextColumn get id => text()();
+  TextColumn get tName => text()(); // 'transactions' | 'splits' | 'settlements'
+  TextColumn get payload => text()(); // JSON-encoded row data
+  IntColumn get retryCount => integer().withDefault(const Constant(0))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 //====================DATABASE==================
 
 @DriftDatabase(
-  tables: [Households, HouseholdMembers, Transactions, Splits, Settlements],
+  tables: [
+    Households,
+    HouseholdMembers,
+    Transactions,
+    Splits,
+    Settlements,
+    OutboxItems,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   //=========== SEED DATA=============//
   Future<void> seedIfEmpty() async {
@@ -187,6 +205,31 @@ class AppDatabase extends _$AppDatabase {
         toUserId: row['to_user_id'],
         amount: (row['amount'] as num).toDouble(),
       ),
+    );
+  }
+
+  Future<void> addToOutbox(String id, String tableName, String jsonPayload) {
+    return into(outboxItems).insert(
+      OutboxItemsCompanion.insert(
+        id: id,
+        tName: tableName,
+        payload: jsonPayload,
+      ),
+    );
+  }
+
+  Future<List<OutboxItem>> getOutboxItems() => select(outboxItems).get();
+
+  Future<void> removeFromOutbox(String id) {
+    return (delete(outboxItems)..where((o) => o.id.equals(id))).go();
+  }
+
+  Future<void> incrementRetryCount(String id) async {
+    final item = await (select(
+      outboxItems,
+    )..where((o) => o.id.equals(id))).getSingle();
+    await (update(outboxItems)..where((o) => o.id.equals(id))).write(
+      OutboxItemsCompanion(retryCount: Value(item.retryCount + 1)),
     );
   }
 }

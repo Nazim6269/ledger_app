@@ -1,18 +1,27 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 import 'package:ledger_app/database/app_database.dart';
+import 'package:ledger_app/features/common/data/services/outbox_service.dart';
+import 'package:ledger_app/features/common/domain/repositories/transaction_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-class TransactionRepository {
+class TransactionRepositoryImpl implements TransactionRepository {
   final AppDatabase _db;
   final SupabaseClient _supabase;
+  final OutboxService _outbox;
 
-  TransactionRepository(this._db, this._supabase);
+  TransactionRepositoryImpl(this._db, this._supabase)
+      : _outbox = OutboxService(_db, _supabase);
 
+  @override
   Future<List<HouseholdMember>> getMembers(String householdId) {
     return _db.getHouseholdMembers(householdId);
   }
 
+  @override
   Future<void> saveExpense({
     required String householdId,
     required String createdBy,
@@ -50,35 +59,41 @@ class TransactionRepository {
       transaction: transaction,
       splits: splitRows,
     );
-    await _pushToSupabase(transaction: transaction, splits: splitRows);
-  }
 
-  Future<void> _pushToSupabase({
-    required TransactionsCompanion transaction,
-    required List<SplitsCompanion> splits,
-  }) async {
-    await _supabase.from('transactions').insert({
-      'id': transaction.id.value,
-      'household_id': transaction.householdId.value,
-      'created_by': transaction.createdBy.value,
-      'amount': transaction.amount.value,
-      'category': transaction.category.value,
-      'note': transaction.note.value,
-      'is_shared': transaction.isShared.value,
-    });
+    await _db.addToOutbox(
+      uuid.v4(),
+      'transactions',
+      jsonEncode({
+        'id': transactionId,
+        'household_id': householdId,
+        'created_by': createdBy,
+        'amount': amount,
+        'category': category,
+        'note': note,
+        'is_shared': isShared,
+      }),
+    );
 
-    if (splits.isNotEmpty) {
-      await _supabase.from('splits').insert(
-            splits.map((s) => {
-              'id': s.id.value,
-              'transaction_id': s.transactionId.value,
-              'user_id': s.userId.value,
-              'amount_owed': s.amountOwed.value,
-            }).toList(),
-          );
+    for (final s in splitRows) {
+      await _db.addToOutbox(
+        uuid.v4(),
+        'splits',
+        jsonEncode({
+          'id': s.id.value,
+          'transaction_id': s.transactionId.value,
+          'user_id': s.userId.value,
+          'amount_owed': s.amountOwed.value,
+        }),
+      );
     }
+
+    unawaited(_outbox.processOutbox());
   }
 
+  @override
+  Future<void> processOutbox() => _outbox.processOutbox();
+
+  @override
   void startRealtimeSync(String householdId) {
     _supabase
         .channel('household_$householdId')

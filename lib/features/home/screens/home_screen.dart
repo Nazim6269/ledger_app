@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/add-expense/presentation/providers/expense_provider.dart';
@@ -16,6 +18,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  Timer? _syncTimer;
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +28,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (household != null) {
         ref.read(transactionRepositoryProvider).startRealtimeSync(household.id);
       }
+      ref.read(transactionRepositoryProvider).processOutbox();
     });
+
+    _syncTimer = Timer.periodic(const Duration(seconds: 15), (_) {
+      ref.read(transactionRepositoryProvider).processOutbox();
+    });
+  }
+
+  @override
+  void dispose() {
+    _syncTimer?.cancel();
+    super.dispose();
   }
 
   @override
