@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/features/add-expense/presentation/providers/expense_provider.dart';
 import 'package:ledger_app/features/add-expense/screens/add_expense_screen.dart';
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ledger_app/features/home/widgets/transactions_provider.dart';
@@ -18,6 +19,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(() {
+      final household = ref.read(currentHouseholdProvider).value;
+      if (household != null) {
+        ref.read(transactionRepositoryProvider).startRealtimeSync(household.id);
+      }
+    });
   }
 
   @override

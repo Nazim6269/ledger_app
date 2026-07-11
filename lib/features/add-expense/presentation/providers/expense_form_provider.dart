@@ -4,8 +4,8 @@ import 'package:ledger_app/features/add-expense/domain/entities/split_type.dart'
 import 'package:ledger_app/features/add-expense/domain/entities/member_input.dart';
 import 'package:ledger_app/features/add-expense/domain/services/split_calculator.dart';
 import 'package:ledger_app/features/add-expense/presentation/providers/expense_provider.dart';
-import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
 import 'package:ledger_app/features/common/providers/current_user_provider.dart';
+import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
 
 class ExpenseFormState {
   final double amount;
@@ -62,7 +62,7 @@ class ExpenseFormNotifier extends StateNotifier<ExpenseFormState> {
   }
 
   Future<void> _loadMembers() async {
-    final members = await ref.read(expenseRepoProvider).getMembers(householdId);
+    final members = await ref.read(transactionRepositoryProvider).getMembers(householdId);
     state = state.copyWith(members: members);
   }
 
@@ -104,7 +104,7 @@ class ExpenseFormNotifier extends StateNotifier<ExpenseFormState> {
     }
 
     await ref
-        .read(expenseRepoProvider)
+        .read(transactionRepositoryProvider)
         .saveExpense(
           householdId: householdId,
           createdBy: currentUserId,

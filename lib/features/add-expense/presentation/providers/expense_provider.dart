@@ -1,8 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ledger_app/features/add-expense/data/repositories/expense_repository_impl.dart';
-import 'package:ledger_app/features/add-expense/domain/repositories/expense_repository.dart';
+import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ledger_app/features/common/providers/database_provider.dart';
+import 'package:ledger_app/features/common/repositories/transaction_repositories.dart';
 
-final expenseRepoProvider = Provider<ExpenseRepository>((ref) {
-  return ExpenseRepositoryImpl(ref.watch(databaseProvider));
+final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
+  return TransactionRepository(
+    ref.watch(databaseProvider),
+    ref.watch(supabaseClientProvider),
+  );
 });
+

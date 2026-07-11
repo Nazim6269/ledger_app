@@ -151,6 +151,44 @@ class AppDatabase extends _$AppDatabase {
   Future<void> insertSettlement(SettlementsCompanion settlement) {
     return into(settlements).insert(settlement);
   }
+
+  Future<void> upsertTransactionFromRemote(Map<String, dynamic> row) async {
+    await into(transactions).insertOnConflictUpdate(
+      TransactionsCompanion.insert(
+        id: row['id'],
+        householdId: row['household_id'],
+        createdBy: row['created_by'],
+        amount: (row['amount'] as num).toDouble(),
+        category: row['category'],
+        note: Value(row['note'] ?? ''),
+        isShared: row['is_shared'],
+        isSynced: const Value(true),
+      ),
+    );
+  }
+
+  Future<void> upsertSplitFromRemote(Map<String, dynamic> row) async {
+    await into(splits).insertOnConflictUpdate(
+      SplitsCompanion.insert(
+        id: row['id'],
+        transactionId: row['transaction_id'],
+        userId: row['user_id'],
+        amountOwed: (row['amount_owed'] as num).toDouble(),
+      ),
+    );
+  }
+
+  Future<void> upsertSettlementFromRemote(Map<String, dynamic> row) async {
+    await into(settlements).insertOnConflictUpdate(
+      SettlementsCompanion.insert(
+        id: row['id'],
+        householdId: row['household_id'],
+        fromUserId: row['from_user_id'],
+        toUserId: row['to_user_id'],
+        amount: (row['amount'] as num).toDouble(),
+      ),
+    );
+  }
 }
 
 LazyDatabase _openConnection() {
