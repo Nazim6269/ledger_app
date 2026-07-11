@@ -12,6 +12,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   final AppDatabase _db;
   final SupabaseClient _supabase;
   final OutboxService _outbox;
+  RealtimeChannel? _activeChannel;
 
   TransactionRepositoryImpl(this._db, this._supabase)
       : _outbox = OutboxService(_db, _supabase);
@@ -95,7 +96,8 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   void startRealtimeSync(String householdId) {
-    _supabase
+    _activeChannel?.unsubscribe();
+    _activeChannel = _supabase
         .channel('household_$householdId')
         .onPostgresChanges(
           event: PostgresChangeEvent.insert,
@@ -135,5 +137,13 @@ class TransactionRepositoryImpl implements TransactionRepository {
           },
         )
         .subscribe();
+  }
+
+  @override
+  void stopRealtimeSync() {
+    if (_activeChannel != null) {
+      _supabase.removeChannel(_activeChannel!);
+      _activeChannel = null;
+    }
   }
 }

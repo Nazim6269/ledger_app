@@ -80,7 +80,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => ref.read(authRepositoryProvider).signOut(),
+            onPressed: () async {
+              ref.read(transactionRepositoryProvider).stopRealtimeSync();
+              await ref.read(authRepositoryProvider).signOut();
+            },
           ),
         ],
       ),

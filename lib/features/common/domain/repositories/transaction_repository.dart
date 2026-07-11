@@ -13,4 +13,5 @@ abstract class TransactionRepository {
   });
   Future<void> processOutbox();
   void startRealtimeSync(String householdId);
+  void stopRealtimeSync();
 }
