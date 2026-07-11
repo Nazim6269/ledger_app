@@ -11,12 +11,12 @@ import 'button_variant.dart';
 import 'button_width.dart';
 
 class GenericButton extends StatefulWidget {
-  final String text;
+  final String label;
   final ButtonVariant variant;
   final ButtonSize size;
   final VoidCallback? onPressed;
   final VoidCallback? onLongPress;
-  final bool loading;
+  final bool isLoading;
   final bool selected;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
@@ -43,12 +43,12 @@ class GenericButton extends StatefulWidget {
 
   const GenericButton({
     super.key,
-    required this.text,
+    required this.label,
     this.variant = ButtonVariant.primary,
     this.size = ButtonSize.medium,
     this.onPressed,
     this.onLongPress,
-    this.loading = false,
+    this.isLoading = false,
     this.selected = false,
     this.leadingIcon,
     this.trailingIcon,
@@ -88,7 +88,7 @@ class _GenericButtonState extends State<GenericButton> {
   bool _pressed = false;
   bool _focused = false;
 
-  bool get _isInteractive => !widget.loading && widget.onPressed != null;
+  bool get _isInteractive => !widget.isLoading && widget.onPressed != null;
 
   ButtonInteractionState get _interactionState {
     if (!_isInteractive) return ButtonInteractionState.disabled;
@@ -133,7 +133,7 @@ class _GenericButtonState extends State<GenericButton> {
       ButtonWidthMode.custom => widget.customWidth,
     };
 
-    final Widget content = widget.loading
+    final Widget content = widget.isLoading
         ? Center(
             child: ButtonLoadingIndicator(
               size: style.loaderSize,
@@ -142,7 +142,7 @@ class _GenericButtonState extends State<GenericButton> {
             ),
           )
         : _ButtonContent(
-            text: widget.text,
+            text: widget.label,
             style: style,
             leading: widget.leading,
             leadingIcon: widget.leadingIcon,
@@ -154,7 +154,7 @@ class _GenericButtonState extends State<GenericButton> {
       button: true,
       enabled: _isInteractive,
       selected: widget.selected,
-      label: widget.semanticLabel ?? widget.text,
+      label: widget.semanticLabel ?? widget.label,
       child: Actions(
         actions: <Type, Action<Intent>>{
           ActivateIntent: CallbackAction<ActivateIntent>(

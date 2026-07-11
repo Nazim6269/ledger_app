@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
 import 'package:ledger_app/features/auth/presentation/controllers/login_controller.dart';
 import 'package:ledger_app/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 import 'package:ledger_app/utils/validators.dart';
 import 'package:ledger_app/widgets/app_primary_button.dart';
 import 'package:ledger_app/widgets/app_text_field.dart';
@@ -81,17 +82,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 validator: Validators.password,
               ),
               const SizedBox(height: 24),
-              AppPrimaryButton(
+              GenericButton(
                 label: 'Login',
                 isLoading: loginState.isLoading,
                 onPressed: _submit,
               ),
-              TextButton(
+              GenericButton(
+                label: "Dont't have an account?",
+                variant: ButtonVariant.text,
+                size: ButtonSize.small,
+                foregroundColor: AppColors.primary2,
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const SignupScreen()),
                 ),
-                child: const Text("Don't have an account?"),
               ),
             ],
           ),

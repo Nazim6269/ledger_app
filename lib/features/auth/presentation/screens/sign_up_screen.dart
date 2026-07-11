@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 import '../providers/auth_provider.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -85,15 +87,22 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
             ],
             const SizedBox(height: 24),
-            FilledButton(
-              onPressed: _loading ? null : _signup,
-              child: _loading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Create Account'),
+            GenericButton(
+              label: 'Create Account',
+              variant: ButtonVariant
+                  .primary, // FilledButton == solid fill == primary
+              isLoading: _loading,
+              onPressed: _signup,
+            ),
+            GenericButton(
+              label: "Already have an account?",
+              variant: ButtonVariant.text,
+              size: ButtonSize.small,
+              foregroundColor: AppColors.primary2,
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              ),
             ),
           ],
         ),

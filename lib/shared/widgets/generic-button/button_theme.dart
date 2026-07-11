@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'button_colors.dart';
+import '../../../core/theme/app_colors.dart';
 import 'button_variant.dart';
 
 @immutable
@@ -75,49 +75,49 @@ class AppButtonTheme extends ThemeExtension<AppButtonTheme> {
     return AppButtonTheme(
       variants: {
         ButtonVariant.primary: const ButtonVariantColors(
-          background: ButtonColors.primary,
+          background: AppColors.primary,
           foreground: Colors.white,
           border: Colors.transparent,
         ),
         ButtonVariant.secondary: const ButtonVariantColors(
-          background: ButtonColors.secondary,
-          foreground: ButtonColors.primary,
+          background: AppColors.secondary,
+          foreground: AppColors.primary,
           border: Colors.transparent,
         ),
         ButtonVariant.subtle: const ButtonVariantColors(
-          background: ButtonColors.secondary,
-          foreground: ButtonColors.secondaryDark,
+          background: AppColors.secondary,
+          foreground: AppColors.secondaryDark,
           border: Colors.transparent,
         ),
         ButtonVariant.outline: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: ButtonColors.primary,
-          border: ButtonColors.primary,
+          foreground: AppColors.primary,
+          border: AppColors.primary,
         ),
         ButtonVariant.ghost: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: ButtonColors.onSurfaceLight,
+          foreground: AppColors.onSurfaceLight,
           border: Colors.transparent,
         ),
         ButtonVariant.text: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: ButtonColors.primary,
+          foreground: AppColors.primary,
           border: Colors.transparent,
         ),
         ButtonVariant.gradient: const ButtonVariantColors(
-          background: ButtonColors.primary,
+          background: AppColors.primary,
           foreground: Colors.white,
           border: Colors.transparent,
           gradient: LinearGradient(
-            colors: [ButtonColors.primary, ButtonColors.primary2],
+            colors: [AppColors.primary, AppColors.primary2],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
         ),
       },
-      disabledBackground: ButtonColors.disabledSurfaceLight,
-      disabledForeground: ButtonColors.disabledOnSurfaceLight,
-      disabledBorder: ButtonColors.disabledSurfaceLight,
+      disabledBackground: AppColors.disabledSurfaceLight,
+      disabledForeground: AppColors.disabledOnSurfaceLight,
+      disabledBorder: AppColors.disabledSurfaceLight,
       elevation: 0,
       pressedElevation: 0,
       disabledElevation: 0,
@@ -129,59 +129,59 @@ class AppButtonTheme extends ThemeExtension<AppButtonTheme> {
     return AppButtonTheme(
       variants: {
         ButtonVariant.primary: const ButtonVariantColors(
-          background: ButtonColors.primaryDark,
+          background: AppColors.primaryDark,
           foreground: Colors.black,
           border: Colors.transparent,
         ),
         ButtonVariant.secondary: const ButtonVariantColors(
-          background: ButtonColors.secondaryDark,
-          foreground: ButtonColors.primaryDark,
+          background: AppColors.secondaryDark,
+          foreground: AppColors.primaryDark,
           border: Colors.transparent,
         ),
         ButtonVariant.outline: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: ButtonColors.primaryDark,
-          border: ButtonColors.primaryDark,
+          foreground: AppColors.primaryDark,
+          border: AppColors.primaryDark,
         ),
         ButtonVariant.ghost: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: ButtonColors.onSurfaceDark,
+          foreground: AppColors.onSurfaceDark,
           border: Colors.transparent,
         ),
         ButtonVariant.text: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: ButtonColors.primaryDark,
+          foreground: AppColors.primaryDark,
           border: Colors.transparent,
         ),
         ButtonVariant.gradient: const ButtonVariantColors(
-          background: ButtonColors.primaryDark,
+          background: AppColors.primaryDark,
           foreground: Colors.black,
           border: Colors.transparent,
           gradient: LinearGradient(
-            colors: [ButtonColors.primaryDark, Color(0xFFB388FF)],
+            colors: [AppColors.primaryDark, Color(0xFFB388FF)],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
         ),
         ButtonVariant.danger: const ButtonVariantColors(
-          background: ButtonColors.danger,
+          background: AppColors.danger,
           foreground: Colors.white,
           border: Colors.transparent,
         ),
         ButtonVariant.success: const ButtonVariantColors(
-          background: ButtonColors.success,
+          background: AppColors.success,
           foreground: Colors.white,
           border: Colors.transparent,
         ),
         ButtonVariant.warning: const ButtonVariantColors(
-          background: ButtonColors.warning,
+          background: AppColors.warning,
           foreground: Colors.black,
           border: Colors.transparent,
         ),
       },
-      disabledBackground: ButtonColors.disabledSurfaceDark,
-      disabledForeground: ButtonColors.disabledOnSurfaceDark,
-      disabledBorder: ButtonColors.disabledSurfaceDark,
+      disabledBackground: AppColors.disabledSurfaceDark,
+      disabledForeground: AppColors.disabledOnSurfaceDark,
+      disabledBorder: AppColors.disabledSurfaceDark,
       elevation: 0,
       pressedElevation: 0,
       disabledElevation: 0,

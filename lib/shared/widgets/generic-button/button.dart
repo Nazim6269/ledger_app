@@ -1,4 +1,4 @@
-export 'button_colors.dart';
+export '../../../core/theme/app_colors.dart';
 export 'button_constants.dart';
 export 'button_extensions.dart';
 export 'button_icon.dart';
