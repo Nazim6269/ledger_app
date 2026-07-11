@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/database/app_database.dart';
-import 'package:ledger_app/features/common/empty_view_widget.dart';
-import 'package:ledger_app/features/common/loading_widget.dart';
+import 'package:ledger_app/features/common/widgets/empty_view_widget.dart';
+import 'package:ledger_app/features/common/widgets/loading_widget.dart';
 import 'package:ledger_app/widgets/transaction_tile.dart';
 
 class TransactionList extends StatelessWidget {

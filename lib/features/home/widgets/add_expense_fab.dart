@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ledger_app/screens/add_expense_screen.dart';
+import 'package:ledger_app/features/add-expense/screens/add_expense_screen.dart';
 
 class AddExpenseFab extends StatelessWidget {
   const AddExpenseFab({super.key});

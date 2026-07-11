@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../database/app_database.dart';
-import '../models/split_type.dart';
+import 'package:ledger_app/database/app_database.dart';
+import 'package:ledger_app/features/add-expense/domain/entities/split_type.dart';
 
 class MemberSplitInput extends StatelessWidget {
   final HouseholdMember member;

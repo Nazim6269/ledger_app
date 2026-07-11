@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ledger_app/providers/auth_provider.dart';
-import 'package:ledger_app/providers/household_repo_provider.dart';
-import 'package:ledger_app/screens/home_screen.dart';
-import 'package:ledger_app/screens/household_setup_screen.dart';
-import 'package:ledger_app/screens/login_screen.dart';
+import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:ledger_app/features/home/screens/home_screen.dart';
+import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
+import 'package:ledger_app/features/household/screens/household_setup_screen.dart';
+import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -68,7 +66,7 @@ class HouseholdGate extends ConsumerWidget {
             ? const HomeScreen()
             : const HouseholdSetupScreen();
       },
-      error: (error, _) => Scaffold(body: Center(child: Text("Error $e"))),
+      error: (error, _) => Scaffold(body: Center(child: Text("Error $error"))),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );

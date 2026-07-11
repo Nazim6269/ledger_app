@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
+import 'package:ledger_app/features/auth/presentation/controllers/login_controller.dart';
+import 'package:ledger_app/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:ledger_app/utils/validators.dart';
+import 'package:ledger_app/widgets/app_primary_button.dart';
+import 'package:ledger_app/widgets/app_text_field.dart';
+
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (!_formKey.currentState!.validate()) return;
+    ref
+        .read(loginControllerProvider.notifier)
+        .login(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loginState = ref.watch(loginControllerProvider);
+
+    ref.listen(loginControllerProvider, (previous, next) {
+      next.whenOrNull(
+        error: (err, _) {
+          final message = err is AuthFailure
+              ? err.message
+              : 'Login failed. Try again.';
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        },
+        data: (user) {
+          if (user != null) {
+            // e.g. context.go('/home')
+          }
+        },
+      );
+    });
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Log In')),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppTextField(
+                controller: _emailController,
+                label: 'Email Address',
+                keyboardType: TextInputType.emailAddress,
+                validator: Validators.email,
+              ),
+              const SizedBox(height: 24),
+              AppTextField(
+                controller: _passwordController,
+                label: 'Password',
+                obscureText: true,
+                validator: Validators.password,
+              ),
+              const SizedBox(height: 24),
+              AppPrimaryButton(
+                label: 'Login',
+                isLoading: loginState.isLoading,
+                onPressed: _submit,
+              ),
+              TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SignupScreen()),
+                ),
+                child: const Text("Don't have an account?"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

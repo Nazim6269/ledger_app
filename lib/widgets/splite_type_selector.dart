@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ledger_app/models/split_type.dart';
+import 'package:ledger_app/features/add-expense/domain/entities/split_type.dart';
 
 class SpliteTypeSelector extends StatelessWidget {
   final SplitType selected;
