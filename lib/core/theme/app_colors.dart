@@ -28,4 +28,21 @@ abstract class AppColors {
   static const Color outlineDark = Color(0xFF4A4B52);
   static const Color disabledSurfaceDark = Color(0xFF2C2D33);
   static const Color disabledOnSurfaceDark = Color(0xFF6C6D75);
+
+  static const Color border = Color(0xFFD0D5DD);
+  static const Color borderFocused = Color(0xFF2563EB);
+  static const Color borderError = Color(0xFFDC2626);
+  static const Color borderDisabled = Color(0xFFE5E7EB);
+
+  static const Color fill = Color(0xFFF9FAFB);
+  static const Color fillDisabled = Color(0xFFF3F4F6);
+
+  static const Color label = Color(0xFF374151);
+  static const Color hint = Color(0xFF9CA3AF);
+  static const Color helper = Color(0xFF6B7280);
+  static const Color error = Color(0xFFDC2626);
+
+  static const Color strengthWeak = Color(0xFFDC2626);
+  static const Color strengthMedium = Color(0xFFF59E0B);
+  static const Color strengthStrong = Color(0xFF16A34A);
 }

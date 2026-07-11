@@ -4,7 +4,10 @@ import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
 import 'package:ledger_app/features/auth/presentation/controllers/login_controller.dart';
 import 'package:ledger_app/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:ledger_app/shared/widgets/generic-button/button.dart';
-import 'package:ledger_app/utils/validators.dart';
+import 'package:ledger_app/shared/widgets/generic-input/generic_input.dart';
+import 'package:ledger_app/shared/widgets/generic-input/input_password_field.dart';
+import 'package:ledger_app/shared/widgets/generic-input/input_type.dart';
+import 'package:ledger_app/shared/widgets/generic-input/validators.dart';
 import 'package:ledger_app/widgets/app_primary_button.dart';
 import 'package:ledger_app/widgets/app_text_field.dart';
 
@@ -68,19 +71,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppTextField(
+              GenericInput(
                 controller: _emailController,
                 label: 'Email Address',
-                keyboardType: TextInputType.emailAddress,
-                validator: Validators.email,
+                inputType: InputType.email,
+                validator: Validators.combine([
+                  Validators.required(),
+                  Validators.email(),
+                ]),
               ),
               const SizedBox(height: 24),
-              AppTextField(
+              GenericInput(
                 controller: _passwordController,
                 label: 'Password',
-                obscureText: true,
-                validator: Validators.password,
+                inputType: InputType.password,
               ),
+              AppPasswordStrengthIndicator(value: _passwordController.text),
               const SizedBox(height: 24),
               GenericButton(
                 label: 'Login',

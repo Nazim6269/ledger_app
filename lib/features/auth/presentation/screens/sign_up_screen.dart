@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:ledger_app/shared/widgets/generic-button/button.dart';
+import 'package:ledger_app/shared/widgets/generic-input/generic_input.dart';
+import 'package:ledger_app/shared/widgets/generic-input/input_password_field.dart';
+import 'package:ledger_app/shared/widgets/generic-input/input_type.dart';
+import 'package:ledger_app/shared/widgets/generic-input/validators.dart';
 import '../providers/auth_provider.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -63,22 +68,34 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
+            GenericInput(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
+              label: 'Name',
+              inputType: InputType.text,
             ),
             const SizedBox(height: 12),
-            TextField(
+            GenericInput(
               controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(labelText: 'Email'),
+              label: 'Email',
+              inputType: InputType.email,
+              prefixIcon: const Icon(Icons.email_outlined),
+              validator: Validators.combine([
+                Validators.email(),
+                Validators.required(),
+              ]),
             ),
             const SizedBox(height: 12),
-            TextField(
+            GenericInput(
               controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: 'Password'),
+              label: 'Password',
+              inputType: InputType.password,
+              validator: Validators.combine([
+                Validators.required(),
+                Validators.match(() => _passwordController.text),
+              ]),
             ),
+            AppPasswordStrengthIndicator(value: _passwordController.text),
+            const SizedBox(height: AppSpacing.lg),
             if (_error != null) ...[
               const SizedBox(height: 12),
               Text(
