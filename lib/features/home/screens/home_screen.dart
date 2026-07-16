@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/add-expense/presentation/providers/expense_provider.dart';
-import 'package:ledger_app/features/add-expense/screens/add_expense_screen.dart';
+import 'package:ledger_app/features/add-expense/presentation/screens/add_expense_screen.dart';
 import 'package:ledger_app/features/home/widgets/home_bar_actions.dart';
 import 'package:ledger_app/features/home/widgets/transaction_list.dart';
 import 'package:ledger_app/features/home/widgets/transactions_provider.dart';
@@ -68,4 +68,3 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
-
