@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
 import 'package:ledger_app/features/home/screens/home_screen.dart';
-import 'package:ledger_app/features/household/screens/household_setup_screen.dart';
+import 'package:ledger_app/features/household/presentation/screens/household_setup_screen.dart';
 
 class HouseholdGate extends ConsumerWidget {
   const HouseholdGate({super.key});

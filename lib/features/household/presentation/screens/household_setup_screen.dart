@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/core/widgets/error_banner.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
 import 'package:ledger_app/features/household/widgets/create_household_tab.dart';
 
-import '../../../core/widgets/error_banner.dart';
 import '../widgets/join_household_tab.dart';
 
 class HouseholdSetupScreen extends ConsumerStatefulWidget {

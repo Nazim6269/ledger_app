@@ -6,7 +6,7 @@ import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart'
 import 'package:ledger_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:ledger_app/features/home/screens/home_screen.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
-import 'package:ledger_app/features/household/screens/household_setup_screen.dart';
+import 'package:ledger_app/features/household/presentation/screens/household_setup_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
