@@ -6,9 +6,15 @@ class HouseholdRepositoryImpl implements HouseholdRepository {
   final SupabaseClient _client;
   HouseholdRepositoryImpl(this._client);
 
+  User _requireUser() {
+    final user = _client.auth.currentUser;
+    if (user == null) throw Exception('Not authenticated');
+    return user;
+  }
+
   @override
   Future<Household?> getMyHousehold() async {
-    final userId = _client.auth.currentUser!.id;
+    final userId = _requireUser().id;
 
     final memberShip = await _client
         .from("household_members")
@@ -24,9 +30,9 @@ class HouseholdRepositoryImpl implements HouseholdRepository {
 
   @override
   Future<Household> createHousehold(String name) async {
-    final userId = _client.auth.currentUser!.id;
-    final userName =
-        _client.auth.currentUser!.userMetadata?['name'] ?? 'Member';
+    final user = _requireUser();
+    final userId = user.id;
+    final userName = user.userMetadata?['name'] ?? 'Member';
 
     final inserted = await _client
         .from('households')
@@ -47,9 +53,9 @@ class HouseholdRepositoryImpl implements HouseholdRepository {
 
   @override
   Future<Household> joinHousehold(String householdId) async {
-    final userId = _client.auth.currentUser!.id;
-    final userName =
-        _client.auth.currentUser!.userMetadata?['name'] ?? 'Member';
+    final user = _requireUser();
+    final userId = user.id;
+    final userName = user.userMetadata?['name'] ?? 'Member';
 
     final household = await _client
         .from('households')

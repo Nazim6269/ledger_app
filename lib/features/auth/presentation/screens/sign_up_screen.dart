@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/core/theme/app_spacing.dart';
+import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
 import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:ledger_app/features/home/screens/home_screen.dart';
 import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 import 'package:ledger_app/shared/widgets/generic-input/generic_input.dart';
 import 'package:ledger_app/shared/widgets/generic-input/input_password_field.dart';
 import 'package:ledger_app/shared/widgets/generic-input/input_type.dart';
 import 'package:ledger_app/shared/widgets/generic-input/validators.dart';
 import '../providers/auth_provider.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -33,22 +35,35 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       _loading = true;
       _error = null;
     });
-    try {
-      await ref
-          .read(authRepositoryProvider)
-          .signUp(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-            name: _nameController.text.trim(),
+    final result = await ref
+        .read(authRepositoryProvider)
+        .signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          name: _nameController.text.trim(),
+        );
+
+    if (!mounted) return;
+    setState(() => _loading = false);
+
+    result.when(
+      failure: (failure) {
+        if (failure is EmailConfirmationRequired) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(failure.message)),
           );
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      setState(() => _error = 'Sign up failed: ${e.toString()}');
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
+          Navigator.pop(context);
+        } else {
+          setState(() => _error = failure.message);
+        }
+      },
+      success: (_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      },
+    );
   }
 
   @override

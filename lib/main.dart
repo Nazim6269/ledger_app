@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:ledger_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:ledger_app/features/home/screens/home_screen.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
 import 'package:ledger_app/features/household/screens/household_setup_screen.dart';
-import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -26,7 +27,8 @@ class LedgerApp extends StatelessWidget {
   Widget build(BuildContext ctx) {
     return MaterialApp(
       title: 'Ledger',
-      theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(colorSchemeSeed: Colors.blueAccent, useMaterial3: true),
       home: AuthGate(),
     );
   }
@@ -42,6 +44,9 @@ class AuthGate extends ConsumerWidget {
 
     return authState.when(
       data: (state) {
+        if (state.event == AuthChangeEvent.passwordRecovery) {
+          return const ResetPasswordScreen();
+        }
         final session = state.session;
         if (session == null) return const LoginScreen();
         return HouseholdGate();
@@ -55,7 +60,7 @@ class AuthGate extends ConsumerWidget {
 
 //============== HouseholdGate=================//
 class HouseholdGate extends ConsumerWidget {
-  HouseholdGate({super.key});
+  const HouseholdGate({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

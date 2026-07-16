@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
 import 'package:ledger_app/features/auth/presentation/controllers/login_controller.dart';
+import 'package:ledger_app/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ledger_app/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:ledger_app/features/household/presentation/screens/household_gate.dart';
 import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 import 'package:ledger_app/shared/widgets/generic-input/generic_input.dart';
 import 'package:ledger_app/shared/widgets/generic-input/input_password_field.dart';
 import 'package:ledger_app/shared/widgets/generic-input/input_type.dart';
 import 'package:ledger_app/shared/widgets/generic-input/validators.dart';
-import 'package:ledger_app/widgets/app_primary_button.dart';
-import 'package:ledger_app/widgets/app_text_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -56,7 +56,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         },
         data: (user) {
           if (user != null) {
-            // e.g. context.go('/home')
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const HouseholdGate()),
+              (route) => false,
+            );
           }
         },
       );
@@ -92,6 +95,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: 'Login',
                 isLoading: loginState.isLoading,
                 onPressed: _submit,
+              ),
+              GenericButton(
+                label: 'Forgot password?',
+                variant: ButtonVariant.text,
+                size: ButtonSize.small,
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ForgotPasswordScreen(),
+                  ),
+                ),
               ),
               GenericButton(
                 label: "Dont't have an account?",

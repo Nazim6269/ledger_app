@@ -2,7 +2,7 @@ import 'package:ledger_app/features/auth/data/datasource/auth_remote_ds.dart';
 import 'package:ledger_app/features/auth/domain/entities/user_entity.dart';
 import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
 import 'package:ledger_app/features/auth/domain/repositories/auth_repositories.dart';
-import 'package:ledger_app/utils/result.dart';
+import 'package:ledger_app/core/utils/result.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -28,19 +28,49 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> signUp({
+  Future<Result<AuthFailure, UserEntity>> signUp({
     required String email,
     required String password,
     required String name,
   }) async {
     try {
-      await _remoteDataSource.signUp(
+      final user = await _remoteDataSource.signUp(
         email: email,
         password: password,
         name: name,
       );
+      if (user != null) {
+        return Succeeded(UserEntity(id: user.id, email: user.email ?? email));
+      }
+      return const Failed(EmailConfirmationRequired());
     } on AuthException catch (e) {
-      throw Exception(e.message);
+      return Failed(_mapSupabaseError(e));
+    } catch (_) {
+      return const Failed(UnknownAuthFailure());
+    }
+  }
+
+  @override
+  Future<Result<AuthFailure, void>> sendResetPasswordEmail(String email) async {
+    try {
+      await _remoteDataSource.sendResetPasswordEmail(email);
+      return const Succeeded(null);
+    } on AuthException catch (e) {
+      return Failed(PasswordResetFailure(e.message));
+    } catch (_) {
+      return const Failed(PasswordResetFailure());
+    }
+  }
+
+  @override
+  Future<Result<AuthFailure, void>> updatePassword(String password) async {
+    try {
+      await _remoteDataSource.updatePassword(password);
+      return const Succeeded(null);
+    } on AuthException catch (e) {
+      return Failed(PasswordResetFailure(e.message));
+    } catch (_) {
+      return const Failed(PasswordResetFailure());
     }
   }
 
@@ -55,7 +85,7 @@ class AuthRepositoryImpl implements AuthRepository {
     // is the practical approach here.
     final msg = e.message.toLowerCase();
 
-    if (msg.contains('invalid login credentials')) {
+    if (msg.contains('invalid login credentials') || msg.contains('invalid_credentials')) {
       return const InvalidCredentialsFailure();
     }
     if (msg.contains('email not confirmed')) {

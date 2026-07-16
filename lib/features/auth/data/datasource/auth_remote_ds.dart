@@ -16,11 +16,20 @@ class AuthRemoteDataSource {
     return user;
   }
 
+  Future<void> sendResetPasswordEmail(String email) async {
+    await _supabase.auth.resetPasswordForEmail(email);
+  }
+
+  Future<void> updatePassword(String password) async {
+    await _supabase.auth.updateUser(UserAttributes(password: password));
+  }
+
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
 
-  Future<void> signUp({
+  /// Returns the [User] if auto-confirmed, or null if email confirmation is required.
+  Future<User?> signUp({
     required String email,
     required String password,
     required String name,
@@ -33,5 +42,7 @@ class AuthRemoteDataSource {
     if (response.user == null) {
       throw Exception('Failed to sign up');
     }
+    if (response.session != null) return response.user;
+    return null;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/domain/entities/user_entity.dart';
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
+import '../../../../core/utils/logger.dart';
 
 class LoginController extends AsyncNotifier<UserEntity?> {
   @override
@@ -12,6 +13,8 @@ class LoginController extends AsyncNotifier<UserEntity?> {
     final result = await ref
         .read(authRepositoryProvider)
         .signIn(email: email.trim(), password: password.trim());
+
+    log.d("Result $result");
 
     state = result.when(
       failure: (f) => AsyncError(f, StackTrace.current),
