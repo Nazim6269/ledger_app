@@ -77,6 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               GenericInput(
                 controller: _emailController,
                 label: 'Email Address',
+                prefixIcon: const Icon(Icons.mail_outline_rounded),
                 inputType: InputType.email,
                 validator: Validators.combine([
                   Validators.required(),
@@ -86,6 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 24),
               GenericInput(
                 controller: _passwordController,
+                prefixIcon: const Icon(Icons.lock_outline_rounded),
                 label: 'Password',
                 inputType: InputType.password,
               ),
