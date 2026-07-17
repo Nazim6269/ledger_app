@@ -75,7 +75,7 @@ class AppButtonTheme extends ThemeExtension<AppButtonTheme> {
     return AppButtonTheme(
       variants: {
         ButtonVariant.primary: const ButtonVariantColors(
-          background: AppColors.primary,
+          background: AppColors.homeAccent,
           foreground: Colors.white,
           border: Colors.transparent,
         ),

@@ -45,4 +45,8 @@ abstract class AppColors {
   static const Color strengthWeak = Color(0xFFDC2626);
   static const Color strengthMedium = Color(0xFFF59E0B);
   static const Color strengthStrong = Color(0xFF16A34A);
+
+  // Home screen
+  static const Color homeBg = Color(0xFFF6E7BC);
+  static const Color homeAccent = Color(0xFF0B2D72);
 }

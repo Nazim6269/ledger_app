@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ledger_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:ledger_app/features/auth/presentation/screens/reset_password_screen.dart';
-import 'package:ledger_app/features/home/screens/home_screen.dart';
-import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
-import 'package:ledger_app/features/household/presentation/screens/household_setup_screen.dart';
+import 'package:ledger_app/features/household/presentation/screens/household_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -58,22 +56,4 @@ class AuthGate extends ConsumerWidget {
   }
 }
 
-//============== HouseholdGate=================//
-class HouseholdGate extends ConsumerWidget {
-  const HouseholdGate({super.key});
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final householdAsync = ref.watch(currentHouseholdProvider);
-    return householdAsync.when(
-      data: (household) {
-        return household != null
-            ? const HomeScreen()
-            : const HouseholdSetupScreen();
-      },
-      error: (error, _) => Scaffold(body: Center(child: Text("Error $error"))),
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
-    );
-  }
-}

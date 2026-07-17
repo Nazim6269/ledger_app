@@ -7,6 +7,7 @@ import 'package:ledger_app/features/home/widgets/home_bar_actions.dart';
 import 'package:ledger_app/features/home/widgets/transaction_list.dart';
 import 'package:ledger_app/features/home/widgets/transactions_provider.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
+import 'package:ledger_app/core/theme/app_colors.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -47,21 +48,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final transactionsAsync = ref.watch(transactionsStreamProvider);
 
     return Scaffold(
+      backgroundColor: AppColors.onSurfaceDark,
       appBar: AppBar(
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
         title: const Text('Ledger'),
         centerTitle: false,
         actions: const [HomeAppBarActions(), SizedBox(width: 4)],
       ),
       body: transactionsAsync.when(
-        data: (transactions) => TransactionList(transactions: transactions),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Error: $err')),
+        data: (transactions) => TransactionList(
+          transactions: transactions,
+          textColor: AppColors.homeAccent,
+        ),
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: AppColors.homeAccent),
+        ),
+        error: (err, _) => Center(
+          child: Text(
+            'Error: $err',
+            style: TextStyle(color: AppColors.homeAccent),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => const AddExpenseScreen()),
         ),
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
         label: const Text('Add Expense'),
       ),
