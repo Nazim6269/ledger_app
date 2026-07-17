@@ -49,9 +49,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     result.when(
       failure: (failure) {
         if (failure is EmailConfirmationRequired) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(failure.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(failure.message)));
           Navigator.pop(context);
         } else {
           setState(() => _error = failure.message);
@@ -77,7 +77,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

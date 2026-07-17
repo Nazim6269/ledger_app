@@ -42,8 +42,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           final message = err is AuthFailure
               ? err.message
               : 'Something went wrong. Try again.';
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(message)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
         },
         data: (_) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -59,7 +60,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Reset Password')),
+      appBar: AppBar(
+        title: const Text('Reset Password'),
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
