@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
-import 'package:ledger_app/features/settlement/screens/settlement_screen.dart';
+import 'package:ledger_app/features/settlement/presentation/screens/settlement_screen.dart';
 
 class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});

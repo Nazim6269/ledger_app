@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/core/theme/app_colors.dart';
 import 'package:ledger_app/core/widgets/error_banner.dart';
 import 'package:ledger_app/features/add-expense/presentation/providers/expense_form_provider.dart';
 import 'package:ledger_app/features/add-expense/presentation/widgets/amount_input.dart';
@@ -18,7 +19,11 @@ class AddExpenseScreen extends ConsumerWidget {
     final notifier = ref.read(expenseFormProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Expense')),
+      appBar: AppBar(
+        title: const Text('Add Expense'),
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -55,4 +60,3 @@ class AddExpenseScreen extends ConsumerWidget {
     );
   }
 }
-

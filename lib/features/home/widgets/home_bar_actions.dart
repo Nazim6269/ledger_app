@@ -4,7 +4,7 @@ import 'package:ledger_app/features/add-expense/presentation/providers/expense_p
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ledger_app/features/home/widgets/invitecode_dialog.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
-import 'package:ledger_app/features/settlement/screens/settlement_screen.dart';
+import 'package:ledger_app/features/settlement/presentation/screens/settlement_screen.dart';
 
 class HomeAppBarActions extends ConsumerWidget {
   const HomeAppBarActions({super.key});

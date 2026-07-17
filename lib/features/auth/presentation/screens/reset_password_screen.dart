@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ledger_app/features/auth/domain/failure/auth_failure.dart';
 import 'package:ledger_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 import 'package:ledger_app/shared/widgets/generic-input/generic_input.dart';
-import 'package:ledger_app/shared/widgets/generic-input/input_password_field.dart';
 import 'package:ledger_app/shared/widgets/generic-input/input_type.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
@@ -41,8 +39,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
     result.when(
       failure: (f) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(f.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(f.message)));
       },
       success: (_) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -69,8 +68,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 controller: _passwordController,
                 label: 'New Password',
                 inputType: InputType.password,
-                validator: (v) =>
-                    (v == null || v.length < 6) ? 'At least 6 characters' : null,
+                validator: (v) => (v == null || v.length < 6)
+                    ? 'At least 6 characters'
+                    : null,
               ),
               const SizedBox(height: 16),
               GenericInput(
