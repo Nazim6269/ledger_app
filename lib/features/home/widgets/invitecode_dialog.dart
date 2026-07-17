@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 
 class InviteCodeDialog extends StatelessWidget {
   const InviteCodeDialog({super.key, required this.inviteCode});
@@ -20,7 +21,7 @@ class InviteCodeDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: const Text('Invite Code'),
       content: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(14),
@@ -38,6 +39,7 @@ class InviteCodeDialog extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.copy_rounded, size: 20),
+              color: AppColors.homeAccent,
               tooltip: 'Copy',
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: inviteCode));
@@ -50,10 +52,7 @@ class InviteCodeDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
-        ),
+        GenericButton(onPressed: () => Navigator.pop(context), label: "Close"),
       ],
     );
   }

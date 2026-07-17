@@ -24,7 +24,6 @@ class TransactionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final formatter = DateFormat('MMM d, h:mm a');
-    final color = textColor ?? theme.colorScheme.onSurface;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),

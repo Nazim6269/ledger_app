@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ledger_app/core/widgets/empty_state.dart';
 import 'package:ledger_app/features/household/presentation/providers/household_provider.dart';
 import 'package:ledger_app/features/settlement/domain/services/settlement_calculator.dart';
 import 'package:ledger_app/features/settlement/presentation/providers/settlement_provider.dart';
 import 'package:ledger_app/features/common/providers/current_user_provider.dart';
+import 'package:ledger_app/shared/widgets/generic-button/button.dart';
 
 class SettlementScreen extends ConsumerWidget {
   const SettlementScreen({super.key});
@@ -14,7 +16,11 @@ class SettlementScreen extends ConsumerWidget {
     final currentUserId = ref.watch(currentUserProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settle Up')),
+      appBar: AppBar(
+        title: const Text('Settle Up'),
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
+      ),
       body: dataAsync.when(
         data: (data) {
           final balances = SettlementCalculator.calculateBalances(
@@ -25,7 +31,10 @@ class SettlementScreen extends ConsumerWidget {
 
           if (balances.isEmpty ||
               balances.values.every((v) => v.abs() < 0.01)) {
-            return const Center(child: Text('All settled up! 🎉'));
+            return EmptyState(
+              icon: (Icons.select_all_rounded),
+              title: "All Settled Up!",
+            );
           }
 
           final entries = balances.entries.toList();
