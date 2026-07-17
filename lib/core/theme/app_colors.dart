@@ -34,7 +34,7 @@ abstract class AppColors {
   static const Color borderError = Color(0xFFDC2626);
   static const Color borderDisabled = Color(0xFFE5E7EB);
 
-  static const Color fill = Color(0xFFF9FAFB);
+  static const Color fill = Color(0xFFF3F6FC);
   static const Color fillDisabled = Color(0xFFF3F4F6);
 
   static const Color label = Color(0xFF374151);
