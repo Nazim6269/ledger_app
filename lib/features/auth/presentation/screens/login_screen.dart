@@ -66,7 +66,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Log In')),
+      appBar: AppBar(
+        title: const Text('Log In'),
+        backgroundColor: AppColors.homeAccent,
+        foregroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -113,7 +117,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: "Dont't have an account?",
                 variant: ButtonVariant.text,
                 size: ButtonSize.small,
-                foregroundColor: AppColors.primary2,
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const SignupScreen()),

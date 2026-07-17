@@ -33,7 +33,7 @@ class InputTheme extends ThemeExtension<InputTheme> {
     this.fillColor = AppColors.fill,
     this.disabledFillColor = AppColors.fillDisabled,
     this.borderColor = AppColors.border,
-    this.focusedBorderColor = AppColors.borderFocused,
+    this.focusedBorderColor = AppColors.homeAccent,
     this.errorBorderColor = AppColors.borderError,
     this.disabledBorderColor = AppColors.borderDisabled,
     this.labelStyle = AppTypography.label,

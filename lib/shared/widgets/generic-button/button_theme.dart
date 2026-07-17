@@ -101,7 +101,7 @@ class AppButtonTheme extends ThemeExtension<AppButtonTheme> {
         ),
         ButtonVariant.text: const ButtonVariantColors(
           background: Colors.transparent,
-          foreground: AppColors.primary,
+          foreground: AppColors.homeAccent,
           border: Colors.transparent,
         ),
         ButtonVariant.gradient: const ButtonVariantColors(
